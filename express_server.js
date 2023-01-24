@@ -9,6 +9,13 @@ const urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
+function generateRandomString() {}
+
+generateRandomString()
+
+app.use(express.urlencoded({ extended: true }));
+
+
 app.get("/", (req, res) => {
   res.send("Hello!");
 });
@@ -30,12 +37,24 @@ app.get("/urls", (req, res) => {
   res.render("urls_index", templateVars);
 });
 
-app.get("/urls/:id", (req, res) => {
+app.get("/urls/new", (req, res) => {
+  res.render("urls_new");
+});
 
+app.get("/urls/:id", (req, res) => {
+  
   const id = req.params.id
   const longURL = urlDatabase[id]
-
+  
   const templateVars = {id, longURL };
   res.render("urls_show", templateVars);
+});
 
+app.post("/urls", (req, res) => {
+  let body = req.body.longURL
+  let urlDatabase = {
+    body
+   }
+   console.log(urlDatabase) // Log the POST request body to the console
+  res.send('Ok'); // Respond with 'Ok' (we will replace this)
 });
