@@ -27,9 +27,6 @@ app.get("/", (req, res) => {
   res.send("Hello!");
 });
 
-app.listen(PORT, () => {
-  console.log(`Example app listening on port ${PORT}!`);
-});
 
 app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
@@ -49,17 +46,17 @@ app.get("/urls/new", (req, res) => {
 });
 
 app.get("/urls/:id", (req, res) => {
-
-  const id = req.params.id
-  const longURL = urlDatabase[id]
-
+  
+  const id = req.params.id;
+  const longURL = urlDatabase[id];
+  
   const templateVars = { id, longURL };
   res.render("urls_show", templateVars);
 });
 
 app.get("/u/:id", (req, res) => {
-  const id = req.params.id 
-  const longURL = urlDatabase[id]
+  const id = req.params.id; 
+  const longURL = urlDatabase[id];
   res.redirect(longURL);
 });
 
@@ -69,4 +66,14 @@ app.post("/urls", (req, res) => {
   let id = generateRandomString(); // Log the POST request body to the console
   urlDatabase[id] = longURL;
   res.redirect(`/urls/${id}`);
+});
+
+app.post("/urls/:id/delete", (req, res) => {
+  const id = req.params.id;
+  delete urlDatabase[id];
+  res.redirect("/urls");
+})
+
+app.listen(PORT, () => {
+  console.log(`Example app listening on port ${PORT}!`);
 });
