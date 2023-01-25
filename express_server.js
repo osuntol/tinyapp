@@ -21,7 +21,7 @@ function generateRandomString() {
 
 
 app.use(express.urlencoded({ extended: true }));
-
+//app.use(cookieParser());
 
 app.get("/", (req, res) => {
   res.send("Hello!");
@@ -60,6 +60,8 @@ app.get("/u/:id", (req, res) => {
   res.redirect(longURL);
 });
 
+
+
 app.post("/urls", (req, res) => {
   
   let longURL = req.body.longURL;
@@ -78,7 +80,7 @@ app.post("/urls/:id", (req, res)=>{
   let longURL = req.body.longURL
   urlDatabase[req.params.id]= longURL
   
-  res.redirect(`/urls/`)
+  res.redirect(`/urls`)
 })
 
 app.post("/urls/:id/update", (req, res) =>{
@@ -88,6 +90,18 @@ app.post("/urls/:id/update", (req, res) =>{
  urlDatabase[id]= updatedURL
  res.redirect(`/urls`)
 })
+
+app.post("/login", (req, res) => {
+  const username = req.body.username
+  res.cookie("username",username)
+  res.redirect('/urls')
+
+})
+
+app.get("/login", (req,res) =>{
+  res.render("_header.ejs");
+})
+
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
