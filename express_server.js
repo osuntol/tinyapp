@@ -3,6 +3,7 @@ const app = express();
 const PORT = 8080; // default port 8080
 var cookieParser = require('cookie-parser');
 const { url } = require("inspector");
+const bcrypt = require("bcryptjs");
 
 app.set("view engine", "ejs")
 app.use(express.urlencoded({ extended: true }));
@@ -226,6 +227,8 @@ app.post("/logout", (req, res) => {
 app.post("/login", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
+  const hashedPassword = bcrypt.hashSync(password, 10)
+  bcrypt.compareSync(password, hashedPassword)
   if (email.length === 0 || password.length === 0) {
     return res.status(400).send('error status code 400')
   }
@@ -244,6 +247,8 @@ app.post("/login", (req, res) => {
 app.post("/register", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
+  const hashedPassword = bcrypt.hashSync(password, 10)
+  
   if (email.length === 0 || password.length === 0) {
     return res.status(400).send('error status code 400')
   }
@@ -251,7 +256,7 @@ app.post("/register", (req, res) => {
   thisUser = {
     id,
     email,
-    password
+    hashedPassword
   }
   // console.log("USER:", users)
   users[id] = thisUser
